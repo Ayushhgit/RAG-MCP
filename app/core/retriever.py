@@ -1,12 +1,13 @@
 from app.core.embeddings import EmbeddingModel
 from app.core.vector_store import VectorStore
+from app.core.hybrid_search import HybridSearch
 from app.config import TOP_K
 
 class Retriever:
     def __init__(self, vector_store: VectorStore):
-        self.embedder = EmbeddingModel()
         self.vector_store = vector_store
+        self.hybrid_search = HybridSearch(vector_store)
 
     def retrieve(self, query: str):
-        query_vector = self.embedder.embed_query(query)
-        return self.vector_store.search(query_vector, TOP_K)
+        """Retrieve documents using hybrid search (BM25 + Vector + Rerank)."""
+        return self.hybrid_search.search(query, TOP_K)

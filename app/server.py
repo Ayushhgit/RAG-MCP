@@ -40,11 +40,20 @@ async def search(query: str, top_k: int = 5) -> list[TextContent]:
         return [TextContent(type="text", text=f"Error: {str(e)}")]
 
 @server.tool()
-async def answer(question: str) -> list[TextContent]:
-    """Answer a question using the RAG system."""
+async def answer(question: str, use_planner: bool = False, use_tool_calling: bool = False, stream: bool = False) -> list[TextContent]:
+    """Answer a question using advanced RAG features.
+    - use_planner: Use multi-agent planner for complex queries
+    - use_tool_calling: Use tool-calling agent for dynamic tool usage
+    - stream: Enable streaming response (async)
+    """
     try:
-        result = answer_question(question)
-        return [TextContent(type="text", text=str(result))]
+        if stream:
+            # For streaming, we'd need async handling - not supported in current MCP setup
+            result = answer_question(question, use_planner, use_tool_calling, stream=False)
+            return [TextContent(type="text", text=f"Streaming not supported in MCP. Answer: {result.answer}")]
+        else:
+            result = answer_question(question, use_planner, use_tool_calling, stream)
+            return [TextContent(type="text", text=str(result))]
     except Exception as e:
         return [TextContent(type="text", text=f"Error: {str(e)}")]
 

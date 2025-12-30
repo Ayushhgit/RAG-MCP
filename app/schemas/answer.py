@@ -12,3 +12,4 @@ class AnswerResponse(BaseModel):
     answer: str
     sources: List[SourceDocument]
     question: str
+    agent_used: str = "general_qa"

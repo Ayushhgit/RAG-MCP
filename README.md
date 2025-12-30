@@ -1,97 +1,58 @@
 # RAG MCP Server
 
-A Retrieval-Augmented Generation (RAG) system implemented as a Model Context Protocol (MCP) server.
+A Retrieval-Augmented Generation (RAG) system implemented as a Model Context Protocol (MCP) server with advanced features including hybrid search, reranking, multi-agent routing, context compression, streaming, and tool-calling agents.
 
 ## Features
 
+- **Hybrid Search**: BM25 + Vector search + Reranking for superior retrieval
+- **Reranking**: Cross-encoder based result reranking for improved relevance
+- **Multi-agent Routing**: Intelligent query routing to specialized agents
+- **Context Compression**: Automatic context compression to fit token limits
+- **Streaming Answers**: Real-time streaming responses
+- **Multi-agent RAG Planner**: Complex query decomposition and coordination
+- **Tool-calling Agent**: Dynamic tool usage with function calling
 - Document ingestion and chunking
 - Vector embeddings using Sentence Transformers
-- FAISS vector storage
-- Groq LLM integration for answer generation
+- FAISS vector storage with persistence
+- Groq LLM integration
 - MCP server interface for tool integration
 
-## Installation
+## Advanced Features
 
-1. Clone the repository
-2. Install dependencies:
-   ```bash
-   pip install -e .
-   ```
+### Hybrid Search (BM25 + Vector + Rerank)
+The system combines three retrieval methods for optimal results:
+1. **BM25**: Lexical search using term frequency-inverse document frequency
+2. **Vector Search**: Semantic search using dense embeddings
+3. **Reranking**: Cross-encoder reranking for final relevance scoring
 
-3. Create a `.env` file in the `app/` directory with your configuration:
-   ```
-   EMBEDDING_MODEL=all-MiniLM-L6-v2
-   GROQ_API_KEY=your_groq_api_key_here
-   LLM_MODEL=llama3-8b-8192
-   CHUNK_SIZE=512
-   CHUNK_OVERLAP=50
-   TOP_K=5
-   ```
+### Multi-Agent Router
+Queries are automatically routed to specialized agents based on content analysis:
+- **General QA**: Factual questions and explanations
+- **Technical**: API, infrastructure, and technical topics
+- **Creative**: Brainstorming, design, and creative tasks
+- **Code**: Programming questions and code-related queries
+- **Math**: Mathematical problems and calculations
 
-## Usage
+### Multi-Agent RAG Planner
+For complex queries, the planner:
+- Decomposes queries into sub-queries
+- Routes each sub-query to appropriate agents
+- Synthesizes coherent final answers
+- Handles comparative and multi-part questions
 
-Run the MCP server:
-```bash
-python main.py
-```
+### Context Compression
+Automatically compresses retrieved context using:
+- **Extractive Compression**: Selects most relevant sentences
+- **Abstractive Compression**: Uses LLM to summarize content
+- Configurable compression ratios and length limits
 
-## MCP Tools
+### Tool-Calling Agent
+An intelligent agent that can dynamically call RAG tools:
+- Health checks
+- Document ingestion
+- Knowledge search
+- Question answering
+- Multi-turn conversations with tool usage
 
-The server provides the following tools:
-
-- `health`: Check system health and statistics
-- `ingest`: Ingest documents into the vector store
-- `search`: Search for relevant documents
-- `answer`: Answer questions using RAG
-
-## Project Structure
-
-```
-rag-mcp/
-├── main.py                 # Entry point
-├── pyproject.toml         # Project configuration
-├── README.md              # This file
-├── app/
-│   ├── __init__.py
-│   ├── config.py          # Configuration management
-│   ├── server.py          # MCP server implementation
-│   ├── core/
-│   │   ├── __init__.py
-│   │   ├── chunking.py    # Text chunking utilities
-│   │   ├── embeddings.py  # Embedding model wrapper
-│   │   ├── llm.py         # LLM integration
-│   │   ├── retriever.py   # Document retrieval
-│   │   └── vector_store.py # FAISS vector store
-│   ├── resources/
-│   │   ├── __init__.py
-│   │   └── stats.py       # System statistics
-│   ├── schemas/
-│   │   ├── __init__.py
-│   │   ├── answer.py      # Answer API schemas
-│   │   ├── ingest.py      # Ingest API schemas
-│   │   └── search.py      # Search API schemas
-│   ├── tools/
-│   │   ├── __init__.py
-│   │   ├── answer.py      # Answer tool
-│   │   ├── health.py      # Health check tool
-│   │   ├── ingest.py      # Document ingestion tool
-│   │   └── search.py      # Search tool
-│   └── utils/
-│       ├── __init__.py
-│       ├── logger.py      # Logging utilities
-│       └── ytils.py       # General utilities
-└── data/
-    ├── index/             # Vector index and metadata
-    ├── processed/         # Processed data
-    └── raw/               # Raw input data
-```
-
-## Development
-
-The system is built with:
-- Python 3.11+
-- FAISS for vector search
-- Sentence Transformers for embeddings
-- Groq for LLM
-- MCP for tool interface
-- Pydantic for data validation
+### Streaming Answers
+Real-time streaming responses for better user experience with long-form content.
