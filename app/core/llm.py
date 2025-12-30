@@ -1,7 +1,7 @@
-from openai import OpenAI
-from app.config import OPENAI_API_KEY, LLM_MODEL
+from groq import Groq
+from app.config import GROQ_API_KEY, LLM_MODEL
 
-client = OpenAI(api_key=OPENAI_API_KEY)
+client = Groq(api_key=GROQ_API_KEY)
 
 def generate_answer(context: str, question: str) -> str:
     response = client.chat.completions.create(
